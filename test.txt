@@ -1,0 +1,5 @@
+<b>Bonjour comment <br> vas-tu ma gueule</b>
+<i>je</i>
+<u>suis</u><hr />
+<blink><mdr><color bg=black fg=yellow><color fg=red>fabien.</color>bijour je<reverse> suis un petit </reverse>chinois</color></blink>
+<b>je suis plusieurs </b>
