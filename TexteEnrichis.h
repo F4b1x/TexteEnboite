@@ -27,12 +27,14 @@ public:
 	std::vector<std::string> getTab();
 	size_t getNbLigne();
 	
-	void TraitementBalise();
+	void TraitementTexte();
 private:
 	void TraitementBaliseOuvrante(std::string&, std::string&, bool&);
-	//void TraitementBaliseFermante(std::string&, std::string&, bool&);
+	void TraitementBaliseFermante(std::string&, std::string&);
 	
 	void TraitementBaliseCouleur(std::string&, std::string&);
+
+	void AnalyseString(std::string&, std::string&, std::string&, bool&);
 
 
 };
