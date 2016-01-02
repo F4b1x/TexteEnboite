@@ -5,7 +5,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <unistd.h>
-#include "TexteEnrichis2.h"
+#include "TexteEnrichis.h"
 
 
 
