@@ -14,15 +14,25 @@ private:
 	size_t nbLigne;
 	std::vector<std::string> TabStr;
 	std::vector<std::string> OldColor;
+	char* NomFichier;
+	std::string Texte;
+	size_t _n;
+
+	
 
 public:
 	TexteEnrichis();
-	TexteEnrichis(const char*, size_t);
-	TexteEnrichis(const std::string, size_t);
+	TexteEnrichis(char*, size_t);
+	TexteEnrichis(std::string, size_t);
 	std::vector<std::string> getTab();
 	size_t getNbLigne();
 	
-
+	void TraitementBalise();
+private:
+	void TraitementBaliseOuvrante(std::string&, std::string&, bool&);
+	//void TraitementBaliseFermante(std::string&, std::string&, bool&);
+	
+	void TraitementBaliseCouleur(std::string&, std::string&);
 
 
 };
