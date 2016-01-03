@@ -17,6 +17,14 @@ private:
 	char* NomFichier;
 	std::string Texte;
 	size_t _n;
+	size_t CptChar;
+	size_t TailleMot;
+	bool balise_b, balise_i, balise_u, balise_verb, balise_blink, balise_rever;
+	std::string ligne;
+    std::string phrase;
+    std::string MotDuTexte;
+    std::string motBalise;
+    bool Interrupt, FinLigne, FinFinal;
 
 	
 
@@ -29,12 +37,18 @@ public:
 	
 	void TraitementTexte();
 private:
-	void TraitementBaliseOuvrante(std::string&, std::string&, bool&);
-	void TraitementBaliseFermante(std::string&, std::string&);
+	void TraitementBaliseOuvrante();
+	void TraitementBaliseFermante();
 	
-	void TraitementBaliseCouleur(std::string&, std::string&);
+	void TraitementBaliseCouleur();
 
-	void AnalyseString(std::string&, std::string&, std::string&, bool&);
+	void AnalyseString();
+
+	//void LastVerifAvantTabStr(std::string&, size_t, const bool, const bool, const bool, const bool);
+
+	void RajoutPhrase();
+
+	//void Init_style();
 
 
 };
