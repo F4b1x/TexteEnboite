@@ -5,14 +5,14 @@
 #include <sstream>
 #include <cstdlib>
 #include <unistd.h>
-#include "TexteEnrichis.h"
+#include "TexteEnrichis2.h"
 
 
 
 
 
-TexteEnrichis::TexteEnrichis(): nbLigne(0), TabStr(0), OldColor(0), NomFichier(NULL), Texte(""), _n(0) {}
-TexteEnrichis::TexteEnrichis(char* arg, size_t n): nbLigne(0), TabStr(0), OldColor(0), _n(n)
+TexteEnrichis::TexteEnrichis(): nbLigne(0), TabStr(0), OldColor(0), NomFichier(NULL), Texte(""), _n(0), CptChar(0), TailleMot(0) {}
+TexteEnrichis::TexteEnrichis(char* arg, size_t n): nbLigne(0), TabStr(0), OldColor(0), _n(n), CptChar(0), TailleMot(0), balise_b(false), balise_i(false), balise_u(false), balise_verb(false), balise_blink(false), balise_rever(false), phrase(""), MotDuTexte(""), motBalise(""), ligne(""), Interrupt(false), FinLigne(false), FinFinal(false)
 {
     std::ifstream fich(arg);
 
@@ -31,7 +31,7 @@ TexteEnrichis::TexteEnrichis(char* arg, size_t n): nbLigne(0), TabStr(0), OldCol
     }
 }
 
-TexteEnrichis::TexteEnrichis(const std::string arg, size_t n): nbLigne(0), TabStr(0), OldColor(0), NomFichier(NULL), Texte(arg), _n(0) 
+TexteEnrichis::TexteEnrichis(const std::string arg, size_t n): nbLigne(0), TabStr(0), OldColor(0), NomFichier(NULL), Texte(arg), _n(0), CptChar(0), TailleMot(0), balise_b(false), balise_i(false), balise_u(false), balise_verb(false), balise_blink(false), balise_rever(false), phrase(""), MotDuTexte(""), motBalise(""), ligne(arg), Interrupt(false), FinLigne(false), FinFinal(false)
 {
     std::cout << "L'argument est un string" << std::endl;
 }
@@ -46,7 +46,7 @@ size_t TexteEnrichis::getNbLigne()
     return nbLigne;
 }
 
-void TexteEnrichis::TraitementBaliseCouleur(std::string& phrase, std::string& motBalise)
+void TexteEnrichis::TraitementBaliseCouleur()
 {
     std::istringstream StringFlux(motBalise);
     std::string StrPart="";
@@ -83,12 +83,12 @@ void TexteEnrichis::TraitementBaliseCouleur(std::string& phrase, std::string& mo
             {
                 if (Foreground)
                 {
-                    phrase+="\033[30m";
+                    MotDuTexte+="\033[30m";
                     CodeCouleurFG="\033[30m";
                 }
                 else
                 {
-                    phrase+="\033[40m";
+                    MotDuTexte+="\033[40m";
                     CodeCouleurBG="\033[40m";
                 }
             }
@@ -96,12 +96,12 @@ void TexteEnrichis::TraitementBaliseCouleur(std::string& phrase, std::string& mo
             {
                 if (Foreground)
                 {
-                    phrase+="\033[31m";
+                    MotDuTexte+="\033[31m";
                     CodeCouleurFG="\033[30m";
                 }
                 else
                 {    
-                    phrase+="\033[41m";
+                    MotDuTexte+="\033[41m";
                     CodeCouleurBG="\033[30m";
                 }
             }
@@ -109,12 +109,12 @@ void TexteEnrichis::TraitementBaliseCouleur(std::string& phrase, std::string& mo
             {
                 if (Foreground)
                 {    
-                    phrase+="\033[32m";
+                    MotDuTexte+="\033[32m";
                     CodeCouleurFG="\033[32m";
                 }
                 else
                 {    
-                    phrase+="\033[42m";
+                    MotDuTexte+="\033[42m";
                     CodeCouleurBG="\033[42m";
                 }
             }
@@ -122,12 +122,12 @@ void TexteEnrichis::TraitementBaliseCouleur(std::string& phrase, std::string& mo
             {
                 if (Foreground)
                 {    
-                    phrase+="\033[33m";
+                    MotDuTexte+="\033[33m";
                     CodeCouleurFG="\033[33m";
                 }
                 else
                 {    
-                    phrase+="\033[43m";
+                    MotDuTexte+="\033[43m";
                     CodeCouleurBG="\033[43m";
                 }
             }
@@ -135,12 +135,12 @@ void TexteEnrichis::TraitementBaliseCouleur(std::string& phrase, std::string& mo
             {
                 if (Foreground)
                 {    
-                    phrase+="\033[34m";
+                    MotDuTexte+="\033[34m";
                     CodeCouleurFG="\033[34m";
                 }
                 else
                 {    
-                    phrase+="\033[44m";
+                    MotDuTexte+="\033[44m";
                     CodeCouleurBG="\033[44m";
                 }
             }
@@ -148,12 +148,12 @@ void TexteEnrichis::TraitementBaliseCouleur(std::string& phrase, std::string& mo
             {
                 if (Foreground)
                 {    
-                    phrase+="\033[35m";
+                    MotDuTexte+="\033[35m";
                     CodeCouleurFG="\033[35m";
                 }
                 else
                 {    
-                    phrase+="\033[45m";
+                    MotDuTexte+="\033[45m";
                     CodeCouleurBG="\033[45m";
                 }
             }
@@ -161,12 +161,12 @@ void TexteEnrichis::TraitementBaliseCouleur(std::string& phrase, std::string& mo
             {
                 if (Foreground)
                 {    
-                    phrase+="\033[36m";
+                    MotDuTexte+="\033[36m";
                     CodeCouleurFG="\033[36m";
                 }
                 else
                 {    
-                    phrase+="\033[46m";
+                    MotDuTexte+="\033[46m";
                     CodeCouleurBG="\033[46m";
                 }
             }
@@ -174,12 +174,12 @@ void TexteEnrichis::TraitementBaliseCouleur(std::string& phrase, std::string& mo
             {
                 if (Foreground)
                 {    
-                    phrase+="\033[37m";
+                    MotDuTexte+="\033[37m";
                     CodeCouleurFG="\033[37m";
                 }
                 else
                 {    
-                    phrase+="\033[47m";
+                    MotDuTexte+="\033[47m";
                     CodeCouleurBG="\033[47m";
                 }
             }
@@ -197,10 +197,7 @@ void TexteEnrichis::TraitementBaliseCouleur(std::string& phrase, std::string& mo
 void TexteEnrichis::TraitementTexte()
 {
 
-    std::string ligne="";
-    std::string phrase="";
-    std::string MotDuTexte="";
-    bool VerbatimActif = false;
+
 
     if (NomFichier != NULL) 
     {
@@ -217,43 +214,69 @@ void TexteEnrichis::TraitementTexte()
             while (!fich.eof()) 
             {
                 getline(fich, ligne);
-
-                AnalyseString(ligne, MotDuTexte, phrase, VerbatimActif);
+                AnalyseString();
                 
             }
+            FinFinal=true;
             
+            //std::cout<<" CptChar à la fin du while : "<<CptChar<<std::endl;
+            if ( CptChar != 0)
+            {
+                RajoutPhrase();
+            }
+
             fich.close();
         }
     }
     else
     {
         std::cout<<"L'argument n'est pas un fichier"<<std::endl;
-
-        AnalyseString(Texte, MotDuTexte, phrase, VerbatimActif);
+        ligne=Texte;
+        AnalyseString();
+        FinFinal=true;
+        if ( CptChar != 0)
+        {
+            RajoutPhrase();
+        }
     }
 }
 
-void TexteEnrichis::TraitementBaliseOuvrante(std::string& phrase, std::string& motBalise, bool& Interrupt)
+void TexteEnrichis::TraitementBaliseOuvrante()
 {
     if(motBalise == "<b>" )
     {
-        phrase+="\033[1m";
+        
+        MotDuTexte+="\033[1m";
+        balise_b=true;
+        
     }
     else if (motBalise == "<i>")
     {
-        phrase+="\033[3m";
+        
+        MotDuTexte+="\033[3m";
+        balise_i=true;
+        
     }
     else if (motBalise == "<u>")
     {
-        phrase+="\033[4m";
+        
+        MotDuTexte+="\033[4m";
+        balise_u=true;
+        
     }
     else if (motBalise == "<blink>")
     {
-        phrase+="\033[5m";
+        
+        MotDuTexte+="\033[5m";
+        balise_blink=true;
+        
     }
     else if (motBalise == "<reverse>")
     {
-        phrase+="\033[7m";
+        
+        MotDuTexte+="\033[7m";
+        balise_rever=true;
+        
     }
     else if (motBalise == "<p>")
     {
@@ -261,52 +284,74 @@ void TexteEnrichis::TraitementBaliseOuvrante(std::string& phrase, std::string& m
     }
     else if ((motBalise.substr(0,motBalise.size()-(motBalise.size()-6))) == "<color")
     {
-        TraitementBaliseCouleur(phrase, motBalise);
+        TraitementBaliseCouleur();
+        
         
     }
     else if (motBalise == "<br />" || motBalise == "<br/>" || motBalise == "<br>") // Manquer a gérer le nettoyage de la chaine d'après sur les espaces d'avant
     {
-        TabStr.push_back(phrase);
-        nbLigne+=1;
-        Interrupt=true;
+        FinLigne=true;
+        RajoutPhrase();
+        /*TabStr.push_back(phrase);
+        MotDuTexte="";
         phrase="";
+        CptChar=0;
+        TailleMot=0;*/
+        
+        
+        //Interrupt=true;
     }
     else if (motBalise == "<hr />" || motBalise == "<hr/>" || motBalise == "<hr>")
     {
-        TabStr.push_back(phrase);
-        TabStr.push_back("<hr>");
-        nbLigne+=2;
-        Interrupt=true;
-        phrase="";
+        MotDuTexte+="";
+        RajoutPhrase();
+        MotDuTexte+="<hr>";
+        RajoutPhrase();
+        //Interrupt=true;
     }
     else
     {
-        phrase+=motBalise;
+        TailleMot+= motBalise.size();
+        MotDuTexte+=motBalise;
     }
 }
 
 
-void TexteEnrichis::TraitementBaliseFermante(std::string& phrase, std::string& motBalise)
+void TexteEnrichis::TraitementBaliseFermante()
 {
     if(motBalise == "</b>")
     {
-        phrase+="\033[21m";
+        MotDuTexte+="\033[21m";
+        balise_b=false;
+        
     }
     else if (motBalise == "</i>")
     {
-        phrase+="\033[23m";
+        
+        MotDuTexte+="\033[23m";
+        balise_i=false;
+        
     }
     else if (motBalise == "</u>")
     {
-        phrase+="\033[24m";
+        
+        MotDuTexte+="\033[24m";
+        balise_u=false;
+        
     }
     else if (motBalise == "</blink>")
     {
-        phrase+="\033[25m";
+        
+        MotDuTexte+="\033[25m";
+        balise_blink=false;
+        
     }
     else if (motBalise == "</reverse>")
     {
-        phrase+="\033[27m";
+        
+        MotDuTexte+="\033[27m";
+        balise_rever=false;
+        
     }
     else if (motBalise == "</p>")
     {
@@ -315,59 +360,66 @@ void TexteEnrichis::TraitementBaliseFermante(std::string& phrase, std::string& m
     else if (motBalise == "</color>")
     {
         size_t taille = OldColor.size();
+        //std::cout<<"taille : "<<taille<<std::endl;
+
         if (taille == 1)
         {
-            phrase+="\033[0m";
+            MotDuTexte+="\033[0m";
+            OldColor.pop_back();
+            
         }
         else if (taille > 1)
         {
-            phrase+=OldColor[taille-2];
+            MotDuTexte+=OldColor[taille-2];
             OldColor.pop_back();
         }
     }
     else
     {
-        phrase+=motBalise;
+        TailleMot+=motBalise.size();
+        RajoutPhrase();
     }
 }
 
-void TexteEnrichis::AnalyseString(std::string& ligne, std::string& MotDuTexte, std::string& phrase, bool& VerbatimActif)
+void TexteEnrichis::AnalyseString()
 {
 
 
 
     int i=0;
-    bool Interrupt=false;
+
     while ( i<ligne.size()+1)
     {
-        if ( ligne[i] == '\0' )
-        {
-            
-            if (!Interrupt)
-            {
-                TabStr.push_back(phrase);
-                nbLigne+=1;
-                
-            }
-            phrase="";
+        //std::cout<<"i : "<<i<<std::endl;
+        /*if ( ligne[i] == '\0')
+        {   
+            FinLigne = true;
+            RajoutPhrase(MotDuTexte, phrase, Interrupt, FinLigne);
             i++;
-            Interrupt=false;
-
-            
-        }
-        else
+        }*/
+        //else
+        //{
+        bool Balise = false;
+        Interrupt=false;
+        if ( ligne[i] == '<')
         {
-            Interrupt=false;
-            if ( ligne[i] == '<')
+            Balise=true;
+
+            bool BaliseFermante = false;
+            
+            motBalise="";
+
+            if ( ligne[i+1] == '/')
             {
-                bool BaliseFermante = false;
-                std::string motBalise="";
+                BaliseFermante = true;
+            }
+            else if ( ligne[i+1] == ' ' )
+            {
+                Balise = false;
+            }
 
-                if ( ligne[i+1] == '/')
-                {
-                    BaliseFermante = true;
-                }
-
+            if (Balise)
+            {
                 motBalise+=ligne[i];
                 
                 do
@@ -385,46 +437,185 @@ void TexteEnrichis::AnalyseString(std::string& ligne, std::string& MotDuTexte, s
 
                 if (motBalise == "<verbatim>")
                 {
-                    VerbatimActif = true;
-                    phrase+="";
+                    balise_verb = true;
                 }
 
                 else if ( motBalise == "</verbatim>")
                 {
-                    VerbatimActif = false;
-                    phrase+="";
+                    balise_verb = false;
                 }
 
-                else if ( !BaliseFermante && !VerbatimActif)
+                else if ( !BaliseFermante && !balise_verb)
                 {
-                    TraitementBaliseOuvrante(phrase, motBalise, Interrupt);
+                    TraitementBaliseOuvrante();
                     
                 }
 
-                else if (BaliseFermante && !VerbatimActif)
+                else if (BaliseFermante && !balise_verb)
                 {
-                    TraitementBaliseFermante(phrase, motBalise);
+                    TraitementBaliseFermante();
                     
                 }
-                else if (VerbatimActif)
+                else if (balise_verb)
                 {
-                    phrase+=motBalise;
+                    RajoutPhrase();
                 }
-
+                
                 i++;
             }
-            else
-            {
-                phrase+=ligne[i];
-                i++;
-            }
+            //}
+        }  
             
+        if (ligne[i]!=' ' && ligne[i]!='\0' && !Balise)
+        {
+            MotDuTexte+=ligne[i];
+            //std::cout<<"Mot du Texte : "<<MotDuTexte<<"\t";
+            TailleMot++;
+            //std::cout<<"TailleMot : "<<TailleMot<<"\t";
+            i++;
+        }
+        else if ( ligne[i] == ' ' || ligne[i]=='\0')
+        {
+            if ( TailleMot != 0)
+                RajoutPhrase();
+            i++;
         }
         
     }
 
 }
 
+void TexteEnrichis::RajoutPhrase()
+{
+    //std::cout<<"CptCharAvant : "<<CptChar<<std::endl;
+
+    if ( CptChar != 0)
+    {
+        TailleMot++;
+    }
+
+
+    if ( TailleMot + CptChar <= _n && !FinLigne && !FinFinal)
+    {
+        //std::cout<< " Quel if dans le RajoutPhrase : 1"<<std::endl;
+        if ( CptChar == 0)
+        {
+            phrase+=MotDuTexte;
+        }
+        else
+        {
+            phrase+=" "+MotDuTexte;
+        }
+
+        CptChar+= TailleMot;
+        
+        TailleMot=0;
+        MotDuTexte="";
+
+    }
+
+
+    else if ( TailleMot + CptChar <= _n && FinLigne && !FinFinal)
+    {
+        //std::cout<< " Quel if dans le RajoutPhrase : 2"<<std::endl;
+        if ( CptChar == 0)
+        {
+            phrase+=MotDuTexte;
+        }
+        else
+        {
+            phrase+=" "+MotDuTexte;
+        }
+        
+        
+        size_t tailleOldColor = OldColor.size();
+        if (tailleOldColor > 0)
+        {
+            phrase+="\033[0m";
+        }
+
+        TabStr.push_back(phrase);
+        nbLigne+=1;
+
+        if ( tailleOldColor > 0 )
+        {
+            phrase=""+OldColor.back();
+        }
+        else
+            phrase="";
+
+        CptChar=0;
+        Interrupt=false;
+        TailleMot=0;
+        MotDuTexte="";
+        FinLigne=false;
+    }
+
+
+    else if (TailleMot + CptChar > _n && !FinLigne && !FinFinal)
+    {
+        //std::cout<< " Quel if dans le RajoutPhrase : 3"<<std::endl;
+        if (!Interrupt)
+        {
+            TailleMot--;
+            size_t tailleOldColor = OldColor.size();
+
+            //std::cout<<"Taille du tableau Color : "<<tailleOldColor<<std::endl;
+            //std::cout<<"Etat FinLigne"<<std::endl;
+
+            phrase+="\033[0m";
+
+            TabStr.push_back(phrase);
+            nbLigne+=1;
+
+            if ( tailleOldColor >0)
+            {
+                phrase=""+OldColor.back();
+            }
+            else
+                phrase="";
+
+            CptChar=0;
+            RajoutPhrase();
+
+            
+        }
+    }
+    else if (TailleMot + CptChar > _n && FinLigne && !FinFinal)
+    {
+        //std::cout<< " Quel if dans le RajoutPhrase : 4"<<std::endl;
+        if (!Interrupt)
+        {
+            TailleMot--;
+            size_t tailleOldColor = OldColor.size();
+            
+            phrase+="\033[0m";
+
+            TabStr.push_back(phrase);
+            nbLigne+=1;
+
+            if ( tailleOldColor >0)
+            {
+                phrase=""+OldColor.back();
+            }
+            else
+                phrase="";
+
+            //std::cout<<"------------------------- fois 2 ? -----------------------------------------";
+            CptChar=0;
+            RajoutPhrase();
+            
+        }
+    }
+    else if(FinFinal)
+    {
+        phrase+="\033[0m";
+
+        TabStr.push_back(phrase);
+        nbLigne+=1;
+    }
+    //std::cout<<"CptCharAprès : "<<CptChar<<std::endl;
+}
 
 void affiche(std::ostream& os, TexteEnrichis& T)
 {
