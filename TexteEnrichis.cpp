@@ -11,8 +11,8 @@
 
 
 
-TexteEnrichis::TexteEnrichis(): nbLigne(0), TabStr(0), OldColor(0), NomFichier(NULL), Texte(""), _n(0), CptChar(0), TailleMot(0) {}
-TexteEnrichis::TexteEnrichis(char* arg, size_t n): nbLigne(0), TabStr(0), OldColor(0), _n(n), CptChar(0), TailleMot(0), balise_b(false), balise_i(false), balise_u(false), balise_verb(false), balise_blink(false), balise_rever(false), phrase(""), MotDuTexte(""), motBalise(""), ligne(""), Interrupt(false), FinLigne(false), FinFinal(false)
+TexteEnrichis::TexteEnrichis(): nbLigne(0), TabStr(0), OldColor(0), NomFichier(NULL), Texte(""), _n(0), CptChar(0), TailleMot(0), balise_b(false), balise_i(false), balise_u(false), balise_verb(false), balise_blink(false), balise_rever(false), phrase(""), MotDuTexte(""), motBalise(""), ligne(""), Interrupt(false), FinLigne(false), FinFinal(false), balise_center(false), balise_justify(false), balise_left(false), balise_right(false), AncienneTailleColor(0), DerniereColor("\033[0m") {}
+TexteEnrichis::TexteEnrichis(char* arg, size_t n): nbLigne(0), TabStr(0), OldColor(0), _n(n), CptChar(0), TailleMot(0), balise_b(false), balise_i(false), balise_u(false), balise_verb(false), balise_blink(false), balise_rever(false), phrase(""), MotDuTexte(""), motBalise(""), ligne(""), Interrupt(false), FinLigne(false), FinFinal(false), balise_center(false), balise_justify(false), balise_left(false), balise_right(false), AncienneTailleColor(0), DerniereColor("\033[0m")
 {
     std::ifstream fich(arg);
 
@@ -31,7 +31,7 @@ TexteEnrichis::TexteEnrichis(char* arg, size_t n): nbLigne(0), TabStr(0), OldCol
     }
 }
 
-TexteEnrichis::TexteEnrichis(const std::string arg, size_t n): nbLigne(0), TabStr(0), OldColor(0), NomFichier(NULL), Texte(arg), _n(0), CptChar(0), TailleMot(0), balise_b(false), balise_i(false), balise_u(false), balise_verb(false), balise_blink(false), balise_rever(false), phrase(""), MotDuTexte(""), motBalise(""), ligne(arg), Interrupt(false), FinLigne(false), FinFinal(false)
+TexteEnrichis::TexteEnrichis(const std::string arg, size_t n): nbLigne(0), TabStr(0), OldColor(0), NomFichier(NULL), Texte(arg), _n(0), CptChar(0), TailleMot(0), balise_b(false), balise_i(false), balise_u(false), balise_verb(false), balise_blink(false), balise_rever(false), phrase(""), MotDuTexte(""), motBalise(""), ligne(arg), Interrupt(false), FinLigne(false), FinFinal(false), balise_center(false), balise_justify(false), balise_left(false), balise_right(false), AncienneTailleColor(0), DerniereColor("\033[0m")
 {
     std::cout << "L'argument est un string" << std::endl;
 }
@@ -189,6 +189,8 @@ void TexteEnrichis::TraitementBaliseCouleur()
 
     }
     OldColor.push_back((CodeCouleurFG+CodeCouleurBG));
+    DerniereColor=(CodeCouleurFG+CodeCouleurBG);
+    AncienneTailleColor++;
 }
 
 
@@ -615,6 +617,36 @@ void TexteEnrichis::RajoutPhrase()
         nbLigne+=1;
     }
     //std::cout<<"CptCharAprès : "<<CptChar<<std::endl;
+}
+
+void TexteEnrichis::Init_style()
+{
+    if( balise_b)
+    {
+        phrase+="\033[1m";
+    }
+    if( balise_i)
+    {
+        phrase+="\033[3m";
+    }
+    if( balise_u)
+    {
+        phrase+="\033[4m";
+    }
+    if( balise_blink)
+    {
+        phrase+="\033[4m";
+    }
+    if( balise_rever)
+    {
+        phrase+="\033[4m";
+    }
+    if( DerniereColor=="")
+    {
+        phrase+="\033[0m";
+    }
+    else
+        phrase+=DerniereColor;
 }
 
 void affiche(std::ostream& os, TexteEnrichis& T)
