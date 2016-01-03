@@ -20,11 +20,15 @@ private:
 	size_t CptChar;
 	size_t TailleMot;
 	bool balise_b, balise_i, balise_u, balise_verb, balise_blink, balise_rever;
+	bool balise_center, balise_justify, balise_left, balise_right;
 	std::string ligne;
     std::string phrase;
     std::string MotDuTexte;
     std::string motBalise;
     bool Interrupt, FinLigne, FinFinal;
+    size_t AncienneTailleColor;
+    std::string DerniereColor;
+
 
 	
 
@@ -48,7 +52,7 @@ private:
 
 	void RajoutPhrase();
 
-	//void Init_style();
+	void Init_style();
 
 
 };
