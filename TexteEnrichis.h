@@ -32,6 +32,7 @@ private:
     bool Interrupt, FinLigne, FinFinal, PeutJustify;
     size_t AncienneTailleColor;
     std::string DerniereColor;
+    std::string AncienneDerniereColor;
 
 
 	
