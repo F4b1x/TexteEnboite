@@ -11,8 +11,8 @@
 
 
 
-TexteEnrichis::TexteEnrichis(): nbLigne(0), TabStr(0), OldColorFG(0), OldColorBG(0), Hist_Color(0), NomFichier(NULL), Texte(""), _n(0), CptChar(0), TailleMot(0), balise_b(false), balise_i(false), balise_u(false), balise_verb(false), balise_blink(false), balise_rever(false), phrase(""), MotDuTexte(""), motBalise(""), ligne(""), Interrupt(false), FinLigne(false), FinFinal(false), balise_center(false), balise_justify(false), balise_left(false), balise_right(false), AncienneTailleColor(0), DerniereColor("\033[0m"), balise_center_excpt(false), balise_justify_excpt(false), balise_left_excpt(false), balise_right_excpt(false), PeutJustify(false) {}
-TexteEnrichis::TexteEnrichis(char* arg, size_t n): nbLigne(0), TabStr(0), OldColorFG(0), OldColorBG(0), Hist_Color(0), _n(n), CptChar(0), TailleMot(0), balise_b(false), balise_i(false), balise_u(false), balise_verb(false), balise_blink(false), balise_rever(false), phrase(""), MotDuTexte(""), motBalise(""), ligne(""), Interrupt(false), FinLigne(false), FinFinal(false), balise_center(false), balise_justify(false), balise_left(false), balise_right(false), AncienneTailleColor(0), DerniereColor("\033[0m"), balise_b_init(false), balise_i_init(false), balise_u_init(false), balise_verb_init(false), balise_blink_init(false), balise_rever_init(false), balise_center_excpt(false), balise_justify_excpt(false), balise_left_excpt(false), balise_right_excpt(false), PeutJustify(false)
+TexteEnrichis::TexteEnrichis(): nbLigne(0), TabStr(0), OldColorFG(0), OldColorBG(0), Hist_Color(0), NomFichier(NULL), Texte(""), _n(0), CptChar(0), TailleMot(0), balise_b(false), balise_i(false), balise_u(false), balise_verb(false), balise_blink(false), balise_rever(false), phrase(""), MotDuTexte(""), motBalise(""), ligne(""), Interrupt(false), FinLigne(false), FinFinal(false), balise_center(false), balise_justify(false), balise_left(false), balise_right(false), AncienneTailleColor(0), DerniereColor("\033[0m"), balise_center_excpt(false), balise_justify_excpt(false), balise_left_excpt(false), balise_right_excpt(false), PeutJustify(false), AncienneDerniereColor("") {}
+TexteEnrichis::TexteEnrichis(char* arg, size_t n): nbLigne(0), TabStr(0), OldColorFG(0), OldColorBG(0), Hist_Color(0), _n(n), CptChar(0), TailleMot(0), balise_b(false), balise_i(false), balise_u(false), balise_verb(false), balise_blink(false), balise_rever(false), phrase(""), MotDuTexte(""), motBalise(""), ligne(""), Interrupt(false), FinLigne(false), FinFinal(false), balise_center(false), balise_justify(false), balise_left(false), balise_right(false), AncienneTailleColor(0), DerniereColor("\033[0m"), balise_b_init(false), balise_i_init(false), balise_u_init(false), balise_verb_init(false), balise_blink_init(false), balise_rever_init(false), balise_center_excpt(false), balise_justify_excpt(false), balise_left_excpt(false), balise_right_excpt(false), PeutJustify(false), AncienneDerniereColor("")
 {
     std::ifstream fich(arg);
 
@@ -31,7 +31,7 @@ TexteEnrichis::TexteEnrichis(char* arg, size_t n): nbLigne(0), TabStr(0), OldCol
     }
 }
 
-TexteEnrichis::TexteEnrichis(const std::string arg, size_t n): nbLigne(0), TabStr(0), OldColorFG(0), OldColorBG(0), Hist_Color(0), NomFichier(NULL), Texte(arg), _n(0), CptChar(0), TailleMot(0), balise_b(false), balise_i(false), balise_u(false), balise_verb(false), balise_blink(false), balise_rever(false), phrase(""), MotDuTexte(""), motBalise(""), ligne(arg), Interrupt(false), FinLigne(false), FinFinal(false), balise_center(false), balise_justify(false), balise_left(false), balise_right(false), AncienneTailleColor(0), DerniereColor("\033[0m"), balise_b_init(false), balise_i_init(false), balise_u_init(false), balise_verb_init(false), balise_blink_init(false), balise_rever_init(false), balise_center_excpt(false), balise_justify_excpt(false), balise_left_excpt(false), balise_right_excpt(false), PeutJustify(false)
+TexteEnrichis::TexteEnrichis(const std::string arg, size_t n): nbLigne(0), TabStr(0), OldColorFG(0), OldColorBG(0), Hist_Color(0), NomFichier(NULL), Texte(arg), _n(0), CptChar(0), TailleMot(0), balise_b(false), balise_i(false), balise_u(false), balise_verb(false), balise_blink(false), balise_rever(false), phrase(""), MotDuTexte(""), motBalise(""), ligne(arg), Interrupt(false), FinLigne(false), FinFinal(false), balise_center(false), balise_justify(false), balise_left(false), balise_right(false), AncienneTailleColor(0), DerniereColor("\033[0m"), balise_b_init(false), balise_i_init(false), balise_u_init(false), balise_verb_init(false), balise_blink_init(false), balise_rever_init(false), balise_center_excpt(false), balise_justify_excpt(false), balise_left_excpt(false), balise_right_excpt(false), PeutJustify(false), AncienneDerniereColor("")
 {
     std::cout << "L'argument est un string" << std::endl;
 }
@@ -260,17 +260,23 @@ void TexteEnrichis::TraitementBaliseCouleur()
     if (OldColorFG.size() == 0 && OldColorBG.size() == 0)
     {
         DerniereColor="";
+        AncienneDerniereColor="";
     }
     else if (OldColorFG.size() == 0)
     {
         DerniereColor=OldColorBG.back();
+        AncienneDerniereColor=OldColorBG.back();
     }
     else if (OldColorBG.size() == 0)
     {
         DerniereColor= OldColorFG.back();
+        AncienneDerniereColor= OldColorFG.back();
     }
     else
+    {    
         DerniereColor=( OldColorFG.back() + OldColorBG.back() );
+        AncienneDerniereColor=( OldColorFG.back() + OldColorBG.back() );
+    }
 
 }
 
@@ -312,7 +318,7 @@ void TexteEnrichis::TraitementBaliseOuvrante()
     {
         
         MotDuTexte+="\033[07m";
-        balise_rever=true;
+        balise_rever= true;
         balise_rever_init = true;
         
     }
@@ -415,7 +421,7 @@ void TexteEnrichis::TraitementBaliseFermante()
     else if (motBalise == "</reverse>")
     {
         
-        MotDuTexte+="\033[27m";
+        MotDuTexte+=" \033[27m";
         balise_rever=false;
         
     }
@@ -442,22 +448,23 @@ void TexteEnrichis::TraitementBaliseFermante()
     }
     else if (motBalise == "</color>")
     {
-        //Interrupt=true;
-        std::cout<<"Etat Interrupt dedans: "<<(Interrupt?"1":"0")<<std::endl;
+        Interrupt=true;
+        //std::cout<<"Etat Interrupt dedans: "<<(Interrupt?"1":"0")<<std::endl;
         size_t tailleFG = OldColorFG.size();
-        std::cout<<"tailleFG : "<<tailleFG<<std::endl;
+        //std::cout<<"tailleFG : "<<tailleFG<<std::endl;
         size_t tailleBG = OldColorBG.size();
-        std::cout<<"tailleBG : "<<tailleBG<<std::endl;
+        //std::cout<<"tailleBG : "<<tailleBG<<std::endl;
         size_t tailleHist= Hist_Color.size();
-        std::cout<<"taille : "<<tailleHist<<std::endl;
+        //std::cout<<"taille : "<<tailleHist<<std::endl;
         //std::cout<<"Dans Hist : "<<Hist_Color[tailleHist]<<std::endl;
         //std::cout<<"Dans Hist-1 : "<<Hist_Color[tailleHist-1]<<std::endl;
         //std::cout<<"Dans Hist-2 : "<<Hist_Color[tailleHist-2]<<std::endl;
 
         if ( tailleHist == 1)
         {
-            std::cout<<"Hello"<<std::endl;
+            //std::cout<<"Hello"<<std::endl;
             MotDuTexte+="\033[00m";
+            DerniereColor="";
             Remise_style();
             if (Hist_Color.back() == "fg")
                 OldColorFG.pop_back();
@@ -478,10 +485,12 @@ void TexteEnrichis::TraitementBaliseFermante()
                 if( tailleFG == 1)
                 {
                     MotDuTexte+="\033[00m";
+                    DerniereColor="";
                     Remise_style();
                     if ( tailleBG > 0)
                     {
                         MotDuTexte+=OldColorBG.back();
+                        DerniereColor+=OldColorBG.back();
                     }
 
                     OldColorFG.pop_back();
@@ -489,7 +498,13 @@ void TexteEnrichis::TraitementBaliseFermante()
                 else if ( tailleFG > 1)
                 {
                     MotDuTexte+=OldColorFG[tailleFG-2];
+                    DerniereColor=OldColorFG[tailleFG-2];
                     OldColorFG.pop_back();
+                    if ( tailleBG > 0)
+                    {
+                        MotDuTexte+=OldColorBG.back();
+                        DerniereColor+=OldColorBG.back();
+                    }
                 }
             }
             else if (Hist_Color[tailleHist-1] == "bg")
@@ -497,17 +512,25 @@ void TexteEnrichis::TraitementBaliseFermante()
                 if ( tailleBG == 1)
                 {
                     MotDuTexte+="\033[00m";
+                    DerniereColor="";
                     Remise_style();
                     if ( tailleFG > 0)
                     {
                         MotDuTexte+=OldColorFG.back();
+                        DerniereColor+=OldColorFG.back();
                     }
                     OldColorBG.pop_back();
                 }
                 else if ( tailleBG > 1)
                 {
                     MotDuTexte+=OldColorBG[tailleBG-2];
+                    DerniereColor=OldColorBG[tailleBG-2];
                     OldColorBG.pop_back();
+                    if ( tailleFG > 0)
+                    {
+                        MotDuTexte+=OldColorFG.back();
+                        DerniereColor+=OldColorFG.back();
+                    }
                 }
 
             }
@@ -525,6 +548,7 @@ void TexteEnrichis::TraitementBaliseFermante()
                     MotDuTexte+="\033[00m";
                     Remise_style();
                     MotDuTexte+=OldColorBG[tailleBG-2];
+                    DerniereColor=OldColorBG[tailleBG-2];
                     OldColorBG.pop_back();
                     OldColorFG.pop_back();
                 }
@@ -533,12 +557,14 @@ void TexteEnrichis::TraitementBaliseFermante()
                     MotDuTexte+="\033[00m";
                     Remise_style();
                     MotDuTexte+=OldColorFG[tailleFG-2];
+                    DerniereColor=OldColorFG[tailleFG-2];
                     OldColorBG.pop_back();
                     OldColorFG.pop_back();
                 }
                 else
                 {
                     MotDuTexte+= ( OldColorFG[tailleFG-2] + OldColorBG[tailleBG-2] );
+                    DerniereColor=( OldColorFG[tailleFG-2] + OldColorBG[tailleBG-2] );
                     Remise_style();
                 }
 
@@ -644,7 +670,8 @@ void TexteEnrichis::AnalyseString()
         if (ligne[i]!=' ' && ligne[i]!='\0' && !Balise)
         {
             MotDuTexte+=ligne[i];
-            
+
+
 
             /*size_t tailleHist= Hist_Color.size();
             //std::cout<<"taille : "<<tailleHist<<std::endl;
@@ -699,7 +726,8 @@ void TexteEnrichis::AnalyseString()
 
 void TexteEnrichis::RajoutPhrase()
 {
-    //std::cout<<"Etat Interrupt avant: "<<(Interrupt?"1":"0")<<"\t";
+    std::cout<<"Etat reverse avant: "<<(balise_rever?"1":"0")<<"\t";
+    std::cout<<"Etat reverse_init avant: "<<(balise_rever_init?"1":"0")<<"\t";
     std::cout<<"CptCharAvant : "<<CptChar<<std::endl;
 
     if ( CptChar != 0)
@@ -915,44 +943,65 @@ void TexteEnrichis::RajoutPhrase()
     }
     std::cout<<"CptCharAprès : "<<CptChar<<std::endl;
     //std::cout<<"Etat Interrupt apres: "<<(Interrupt?"1":"0")<<std::endl;
+    std::cout<<"Etat reverse apres: "<<(balise_rever?"1":"0")<<"\t";
+    std::cout<<"Etat reverse_init apres: "<<(balise_rever_init?"1":"0")<<"\t";
 }
 
 void TexteEnrichis::Init_style()
 {
     std::cout<<"ici peut être  : "<<DerniereColor<<"hello \033[0m"<<std::endl;
     std::cout<<"Etat reverse "<<(balise_rever?"1":"0")<<std::endl;
-    std::cout<<"Etat reverser_init "<<(balise_rever_init?"1":"0")<<std::endl;
+    std::cout<<"Etat reverse_init "<<(balise_rever_init?"1":"0")<<std::endl;
     /*std::cout<<"Etat i "<<(balise_i?"1":"0")<<std::endl;
     std::cout<<"Etat i_init "<<(balise_i_init?"1":"0")<<std::endl;
     std::cout<<"Etat u "<<(balise_u?"1":"0")<<std::endl;
     std::cout<<"Etat u_init "<<(balise_u_init?"1":"0")<<std::endl;*/
     phrase="";
-    if( balise_b || (balise_b==false && balise_b_init==true))
+    if( (balise_b && balise_b_init) || (balise_b==false && balise_b_init==true))
     {
         phrase+="\033[01m";
-        balise_b_init = false;
+
+        if (balise_b==false && balise_b_init==true)
+        {
+            balise_b_init = false;
+        }
 
     }
-    if( balise_i || (balise_i==false && balise_i_init==true))
+    if( (balise_i && balise_i_init) || (balise_i==false && balise_i_init==true))
     {
         phrase+="\033[03m";
-        balise_i_init = false;
+        if (balise_i==false && balise_i_init==true)
+        {
+            balise_i_init = false;
+        }
     }
-    if( balise_u || (balise_u==false && balise_u_init==true))
+    if( (balise_u && balise_u_init) || (balise_u==false && balise_u_init==true))
     {
         phrase+="\033[04m";
-        balise_u_init = false;
+
+        if (balise_u==false && balise_u_init==true)
+        {
+            balise_u_init = false;
+        }
     }
-    if( balise_blink || (balise_blink==false && balise_blink_init==true))
+    if( (balise_blink && balise_blink_init) || (balise_blink==false && balise_blink_init==true))
     {
         phrase+="\033[05m";
-        balise_blink_init = false;
+
+        if (balise_blink==false && balise_blink_init==true)
+        {
+            balise_blink_init = false;
+        }
     }
-    if( balise_rever || (balise_rever==false && balise_rever_init==true))
+    if( (balise_rever && balise_rever_init) || (balise_rever==false && balise_rever_init==true))
     {
 
         phrase+="\033[07m";
-        balise_rever_init = false;
+
+        if (balise_rever==false && balise_rever_init==true)
+        {
+            balise_rever_init = false;
+        }
     }
     if ( Hist_Color.size() > 0)
     {
@@ -1022,23 +1071,23 @@ void TexteEnrichis::Init_style()
 void TexteEnrichis::Remise_style()
 {
     std::cout<<"bonne nuit"<<std::endl;
-    if( balise_b || balise_b==false && balise_b_init==true)
+    if( balise_b || (balise_b==false && balise_b_init==true))
     {
         MotDuTexte+="\033[01m";
     }
-    if(  balise_i || balise_i==false && balise_i_init==true)
+    if(  balise_i || (balise_i==false && balise_i_init==true))
     {
         MotDuTexte+="\033[03m";
     }
-    if(  balise_u || balise_u==false && balise_u_init==true)
+    if(  balise_u || (balise_u==false && balise_u_init==true))
     {
         MotDuTexte+="\033[04m";
     }
-    if(  balise_blink || balise_blink==false && balise_blink_init==true)
+    if(  balise_blink || (balise_blink==false && balise_blink_init==true))
     {
         MotDuTexte+="\033[05m";
     }
-    if(  balise_rever || balise_rever==false && balise_rever_init==true)
+    if(  balise_rever || (balise_rever==false && balise_rever_init==true))
     {
         MotDuTexte+="\033[07m";
     }
