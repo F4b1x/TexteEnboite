@@ -1,7 +1,7 @@
 Lib Texte en boite
 
 Objectif:
-Faire une libraiie c++ permettant d'afficher du texte enrichi sur un terminal en l'intégrant dans une boite dessinée par des séquences de caractères.
+Faire une librairie c++ permettant d'afficher du texte enrichi sur un terminal en l'intégrant dans une boite dessinée par des séquences de caractères.
 
 
 Cahier des charges en listing:
